@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  backend:
+    build: .
+    container_name: clipboard-backend
+    ports:
+      - "47294:8080"
+    restart: unless-stopped
