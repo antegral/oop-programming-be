@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  database:
+    image: docker.io/mysql:latest
+    hostname: database
+    container_name: clipboard-database
+    environment:
+      - MYSQL_ROOT_PASSWORD=clipboardTeam
+    ports:
+      - "28309:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
