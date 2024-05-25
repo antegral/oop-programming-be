@@ -49,10 +49,11 @@ public class HomeController {
 		HashMap<String, Object> DatabasePayload = new HashMap<String, Object>();
 		DatabasePayload.put("boardContent", req.boardContent);
 
-		int result = homeService.saveClip(DatabasePayload);
+		int id = homeService.saveClip(DatabasePayload);
 
 		Map<String, Object> ResponseMap = new HashMap<String, Object>();
-		if (result == 1) {
+		if (id > 0) {
+			ResponseMap.put("id", id);
 			ResponseMap.put("message", "등록 성공했습니다.");
 		} else {
 			ResponseMap.put("message", "등록 오류입니다.");
