@@ -11,8 +11,12 @@
 
     <insert id="saveClip" parameterType="java.util.HashMap">
         INSERT INTO board
-		( BOARD_CONTENT)
-		VALUES(#{boardContent});
+        (BOARD_CONTENT)
+        VALUES(#{boardContent})
     </insert>
+
+    <select id="getLastId" resultType="int">
+        SELECT LAST_INSERT_ID();
+    </select>
   
 </mapper>
