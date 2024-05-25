@@ -6,57 +6,59 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.dto.ClipRequest;
+
 @Controller
-public class HomeController{
+public class HomeController {
 	@Autowired
 	ClipBoardService homeService;
-	
-	
 
-	
 	@RequestMapping("/")
 	public ModelAndView homeUrl() {
 		ModelAndView mv = new ModelAndView();
-		HashMap<String,Object> hashMap = new HashMap<String,Object>();
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("boardSn", "1");
-		Map<String,Object> result = homeService.selectClip(hashMap);
+		homeService.selectClip(hashMap);
 		mv.setViewName("index");
 		return mv;
 	}
-	
-	@RequestMapping("/home/selectClip")
+
+	@GetMapping("/clip/{boardSn}")
 	@ResponseBody
-	public Map<String,Object> selectClip(@ModelAttribute HashMap<String,Object> hashMap) {
-		
-		Map<String,Object> result = homeService.selectClip(hashMap);
-		
+	public Map<String, Object> GetClip(@PathVariable("boardSn") Number id) {
+
+		HashMap<String, Object> DatabasePayload = new HashMap<String, Object>();
+		DatabasePayload.put("boardSn", id);
+
+		Map<String, Object> result = homeService.selectClip(DatabasePayload);
+
 		return result;
 	}
-	
-	@RequestMapping("/home/saveClip")
+
+	@PostMapping("/clip")
 	@ResponseBody
-	public Map<String,Object> saveClip(@ModelAttribute HashMap<String,Object> hashMap) {
-		
-		Map<String,Object> resultMap = new HashMap<String,Object>();
-		
-		int result = homeService.saveClip(hashMap);
-		
-		if(result == 1) {
-			resultMap.put("message","등록 성공했습니다.");
-		}else {
-			resultMap.put("message","등록 오류입니다.");
+	public Map<String, Object> PostClip(@RequestBody ClipRequest req) {
+
+		HashMap<String, Object> DatabasePayload = new HashMap<String, Object>();
+		DatabasePayload.put("boardContent", req.boardContent);
+
+		int result = homeService.saveClip(DatabasePayload);
+
+		Map<String, Object> ResponseMap = new HashMap<String, Object>();
+		if (result == 1) {
+			ResponseMap.put("message", "등록 성공했습니다.");
+		} else {
+			ResponseMap.put("message", "등록 오류입니다.");
 		}
-		
-		return resultMap;
+
+		return ResponseMap;
 	}
-	
-	
-	
-	
+
 }
