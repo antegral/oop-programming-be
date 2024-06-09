@@ -35,26 +35,33 @@ public class HomeController {
 	@GetMapping("/clip/{boardSn}")
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@ResponseBody
+	// 클라이언트로부터 클립의 아이디를 받아서 데이터베이스에서 클립을 가져옵니다.
 	public Map<String, Object> GetClip(@PathVariable("boardSn") Number id) {
-
+		// 데이터베이스에서 클립을 가져옵니다.
 		HashMap<String, Object> DatabasePayload = new HashMap<String, Object>();
 		DatabasePayload.put("boardSn", id);
 
+		// 데이터베이스에서 클립을 가져옵니다.
 		Map<String, Object> result = homeService.selectClip(DatabasePayload);
 
+		// 클라이언트에게 응답을 보냅니다.
 		return result;
 	}
 
 	@PostMapping("/clip")
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@ResponseBody
+	// 클라이언트로부터 클립의 내용을 받아서 데이터베이스에 저장합니다.
 	public Map<String, Object> PostClip(@RequestBody ClipRequest req) {
 
+		// 클라이언트로부터 받은 데이터를 데이터베이스에 저장합니다.
 		HashMap<String, Object> DatabasePayload = new HashMap<String, Object>();
 		DatabasePayload.put("boardContent", req.boardContent);
 
+		// 데이터베이스에 저장된 클립의 아이디를 가져옵니다.
 		int id = homeService.saveClip(DatabasePayload);
 
+		// 클라이언트에게 응답을 보냅니다.
 		Map<String, Object> ResponseMap = new HashMap<String, Object>();
 		if (id > 0) {
 			ResponseMap.put("id", id);
